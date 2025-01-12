@@ -1,38 +1,36 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_REGISTRY = 'malikvti'
+        APP_NAME = 'sample-app-k8s'
+        KUBE_CONTEXT = 'minikube'
+    }
     stages {
         stage('Checkout') {
             steps {
-                // Ambil kode dari GitHub
-                git branch: 'main', url: 'git@github.com:Malik-VTI/Java-App.git'
+                checkout scm
             }
         }
-        stage('Build') {
+        stage('Build JAR') {
             steps {
-                // Build aplikasi (contoh menggunakan Maven)
-                sh 'mvn clean install'
+                sh 'mvnw clean package'
             }
         }
-        stage('Test') {
+        stage('Build Docker Image') {
             steps {
-                // Jalankan unit test
-                sh 'mvn test'
+                sh 'docker build -t $DOCKER_REGISTRY/$APP_NAME:latest .'
             }
         }
-        stage('Package') {
+        stage('Push Docker Image') {
             steps {
-                // Pindahkan hasil build ke direktori aplikasi
+                sh 'docker push $DOCKER_REGISTRY/$APP_NAME:latest'
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
                 sh '''
-                    mkdir -p /opt/sample-application
-                    cp target/ecommerce-app-0.0.1-SNAPSHOT.jar /opt/sample-application/
-                '''
-            }
-        }
-        stage('Restart Application') {
-            steps {
-                // Restart aplikasi menggunakan systemctl
-                sh '''
-                    echo "M@B#26L2KUns" | sudo -S systemctl restart sample-application.service
+                kubectl apply -f k8s-deployment.yaml --context=$KUBE_CONTEXT
+                kubectl apply -f k8s-service.yaml --context=$KUBE_CONTEXT
                 '''
             }
         }

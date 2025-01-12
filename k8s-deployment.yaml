@@ -1,0 +1,22 @@
+apiVersion: api/v1
+kind: Deployment
+metadata:
+  name: testing-app-k8s
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: testing-app-k8s
+  template:
+    metadata:
+      labels:
+        app: testing-app
+    spec:
+      containers:
+        - name: testing-app-k8s
+          image: malikvti/testing-app-k8s:latest
+          ports:
+            - containerPort: 8080
+      env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: k8s
