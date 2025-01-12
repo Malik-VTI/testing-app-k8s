@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: testing-app-k8s
-          image: malikvti/testing-app-k8s:latest
+          image: malikvti/sample-app-k8s:latest
           ports:
             - containerPort: 8080
           env:
