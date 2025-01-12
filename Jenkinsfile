@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Build JAR') {
             steps {
-                sh 'mvnw clean package'
+                sh 'mvn clean package'
             }
         }
         stage('Build Docker Image') {
