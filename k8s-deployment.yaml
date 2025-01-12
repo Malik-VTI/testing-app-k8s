@@ -1,4 +1,4 @@
-apiVersion: api/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: testing-app-k8s
@@ -6,7 +6,7 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: testing-app-k8s
+      app: testing-app
   template:
     metadata:
       labels:
