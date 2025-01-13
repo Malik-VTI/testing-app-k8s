@@ -16,7 +16,7 @@ spec:
         - name: testing-app-k8s
           image: malikvti/sample-app-k8s:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 7070
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: k8s
